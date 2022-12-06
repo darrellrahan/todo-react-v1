@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import Heading from "./Heading";
-import InlineForm from "./InlineForm";
-import Lists from "./Lists";
+import Item from "./Item";
 
 const App = () => {
   const [text, setText] = useState("");
@@ -9,18 +7,42 @@ const App = () => {
 
   return (
     <div className="container">
-      <Heading text="To-Do List" />
-      <InlineForm
-        type="text"
-        onChange={(event) => setText(event.target.value)}
-        onClick={() => {
-          setLists((prevValue) => [...prevValue, text]);
-          setText("");
-        }}
-        value={text}
-        btnText="Add"
-      />
-      <Lists arr={lists} />
+      <div className="heading">
+        <h1>To-Do List</h1>
+      </div>
+      <div className="form">
+        <input
+          onChange={(event) => setText(event.target.value)}
+          type="text"
+          value={text}
+        />
+        <button
+          onClick={() => {
+            setLists((prevValue) => [...prevValue, text]);
+            setText("");
+          }}
+        >
+          <span>Add</span>
+        </button>
+      </div>
+      <div>
+        <ul>
+          {lists.map((list, index) => {
+            return (
+              <Item
+                key={index}
+                id={index}
+                text={list}
+                onChecked={(removeIndex) =>
+                  setLists((prevValue) =>
+                    prevValue.filter((list, index) => index != removeIndex)
+                  )
+                }
+              />
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
